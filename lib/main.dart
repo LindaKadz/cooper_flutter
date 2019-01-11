@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:validate/validate.dart';
+// import 'package:dio/dio.dart';
+// import 'package:json_annotation/json_annotation.dart';
+import 'package:http/http.dart' as http;
+// import 'dart:io';
+// import 'dart:convert';
+
 
 void main() => runApp(MyApp());
 
@@ -21,14 +27,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class _RegistrationData {
-  String name = '';
-  String email = '';
-  String nickname = '';
-  String password = '';
-  String confirmPassword = '';
-
-}
+ class _RegistrationData {
+          String name = '';
+          String email = '';
+          String nickname = '';
+          String password = '';
+          String confirmPassword = '';
+   } 
 
 class RegistrationForm extends StatefulWidget {
   @override 
@@ -60,16 +65,19 @@ class RegistrationFormState extends State <RegistrationForm> {
   }
 
 
-  void submit() {
+  void register() async {
     if (this._formKey.currentState.validate()) {
-      _formKey.currentState.save(); 
+      print("Creating Profile...");
 
-      print('Printing the registration data.');
-      print('Name: ${_data.name}');
-      print('Email: ${_data.email}');
-      print('Nickname: ${_data.nickname}');
-      print('Password: ${_data.password}');
-      print('Confirm Password: ${_data.confirmPassword}');
+        http.post("http://localhost:3000/api/v1/auth", 
+        body: {"name": "Linda", "email": "achielinda44@gmail.com", "nickname": "kadz", "password": "123456789", "confirmPassword": "123456789"})
+            .then((response) {
+          print("Response status: ${response.statusCode}");
+          print("Response body: ${response.body}");
+        });
+
+        print("Done!");
+    
     }
 }
 
@@ -145,7 +153,7 @@ class RegistrationFormState extends State <RegistrationForm> {
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
-              onPressed: this.submit,
+              onPressed: this.register,
               child: Text('Register'),
             ),
           ),
